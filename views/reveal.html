@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>小贴吧欢迎您的到来</title>
+    <link rel="stylesheet" href="../libs/bootstrap/css/bootstrap.min.css">
+    <style>
+        body {
+            padding-top: 50px;
+        }
+        .img-thumbnail{
+            height: 100px;
+            width: 100px;
+            margin: 15px auto
+        }
+        .media-child .img-circle{
+            height: 80px;
+            width: 80px;
+        }
+        #content{
+            border:2px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container dropdown">
+            <div class="row">
+                <a class="navbar-brand" href="#">小吧欢迎你</a>
+                <div class="navbar-text pull-right text-right">
+                    <span id="ask"><span class="glyphicon glyphicon-plus"></span><a href='#reply'>去留言</a></span>&#x3000;
+                    <span id="user" class="dropdown-toggle" data-toggle="dropdown">
+                <span class="glyphicon glyphicon-user"></span>
+                    <span></span>
+                    </span>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li><a class="text-right">个人资料</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a class="text-right" href="../photo.html">修改头像</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a class="text-right">退出</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- 显示 -->
+    <div class="container reply" id="reveal">
+        {{each messages as value item}}
+        <div class="media" id="content">
+            <div class="media-left">
+                <img class="media-object img-circle img-thumbnail" src="{{value.userphoto}}" onerror="this.src='/images/user.png'">
+            </div>
+            <div class="media-body">
+                <h2 class="media-header">{{value.username}}</h2>
+                {{value.connect}}
+                <div class="media-body">
+                    {{value.createTime | formatTime}}
+                </div>
+                <div class="media-footer">
+                    <span>
+                        <span suggestion="{{value.id}}" class="glyphicon glyphicon-thumbs-up">{{value.upNumber}}</span>
+                    </span>
+                    &#3000;&#3000;&#3000;
+                    <span>
+                        <span suggestion="{{value.id}}" class="glyphicon glyphicon-thumbs-down">{{value.downNumber}}</span>
+                    </span>
+                    <span suggestion="{{value.id}}" style="cursor:pointer">评论</span>
+                    <form action="" class="commentForm" id="{{value.id}}" style="display:none">
+                        <div class="form-group">
+                            <input type="text" name="connect" placeholder="评论">
+                            <input type="submit" value="确定">
+                        </div>
+                    </form>
+                </div>
+            </div>
+            {{each value.replys.reverse() as data}}
+            <div class="media media-child">
+                    <div class="media-body">
+                        <h4 class="media-heading">{{data.username}}</h4>
+                        {{data.connect}}
+                        <div class="media-footing">
+                            {{data.createTime | formatTime}}
+                        </div>
+                    </div>
+                    <div class="media-right">
+                        <a>
+                            <img class="media-object img-circle" src="{{data.userphoto}}" onerror="this.src='/images/user.png'">
+                        </a>
+                    </div>
+                </div>                       
+            {{/each}}
+        </div>
+     {{/each}}
+    <span style="font-size:1.8rem;font-weight:bold;">总共
+        <span id="number"></span>
+            留言
+    </span>
+    </div>
+    <!-- 留言 -->
+    <nav class="navbar navbar-default">
+        <span type="button" class="btn btn-warning" style="float:right;"><a href="#top" style="list-style:none;">回到顶部</a></span>           
+        <div class="container" id="reply">
+            <form class="form-horizontal" action="/user/advise" method="POST" id="adivseForm">
+                <div class="form-group">
+                    <textarea name="connect" class="form-control" rows="3" placeholder="你的每一个建议对我们来说都是莫大的鼓励"></textarea>
+                </div>
+                <div class="form-group">
+                    <input type="submit" class="btn btn-primary btn-block" value="提交">
+                </div>
+            </form>
+        </div>
+    </nav>
+</body>
+<script src="../libs/jquery.js"></script>
+<script src="../libs/jquery.cookie.js"></script>
+<script src="../libs/bootstrap/js/bootstrap.min.js"></script>
+<script src="../scripts/reveal.js"></script>
+
+</html>
